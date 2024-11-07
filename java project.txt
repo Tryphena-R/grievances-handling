@@ -1,0 +1,155 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Complaint {
+    int id;
+    String userName;
+    String description;
+    String status;
+
+    Complaint(int id, String userName, String description) {
+        this.id = id;
+        this.userName = userName;
+        this.description = description;
+        this.status = "Pending"; 
+    }
+
+    @Override
+    public String toString() {
+        return "Complaint ID: " + id + ", User: " + userName + ", Status: " + status;
+    }
+}
+
+public class GrievanceHandlingSystem {
+    private static List<Complaint> complaints = new ArrayList<>();
+    private static int idCounter = 1;
+    private static final String ADMIN_USER = "admin";
+    private static final String ADMIN_PASS = "password";
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("1. User Login  2. Admin Login  3. Exit");
+            System.out.print("Choose: ");
+            int choice = sc.nextInt();
+            sc.nextLine(); 
+
+            if (choice == 1) {
+                userMenu(sc);
+            } else if (choice == 2) {
+                if (adminLogin(sc)) {
+                    adminMenu(sc);
+                } else {
+                    System.out.println("Invalid admin credentials.");
+                }
+            } else if (choice == 3) {
+                System.out.println("Exiting...");
+                break;
+            } else {
+                System.out.println("Invalid choice. Try again.");
+            }
+        }
+
+        sc.close();
+    }
+
+    private static boolean adminLogin(Scanner sc) {
+        System.out.print("Admin Username: ");
+        String username = sc.nextLine();
+        System.out.print("Admin Password: ");
+        String password = sc.nextLine();
+        return ADMIN_USER.equals(username) && ADMIN_PASS.equals(password);
+    }
+
+    private static void userMenu(Scanner sc) {
+        while (true) {
+            System.out.println("1. Register Complaint  2. View Status  3. Back");
+            System.out.print("Choose: ");
+            int choice = sc.nextInt();
+            sc.nextLine(); // Consume newline
+
+            if (choice == 1) {
+                registerComplaint(sc);
+            } else if (choice == 2) {
+                viewStatus(sc);
+            } else if (choice == 3) {
+                break;
+            } else {
+                System.out.println("Invalid choice. Try again.");
+            }
+        }
+    }
+
+    private static void adminMenu(Scanner sc) {
+        while (true) {
+            System.out.println("1. View Complaints  2. Update Status  3. Back");
+            System.out.print("Choose: ");
+            int choice = sc.nextInt();
+            sc.nextLine(); // Consume newline
+
+            if (choice == 1) {
+                viewAllComplaints();
+            } else if (choice == 2) {
+                updateStatus(sc);
+            } else if (choice == 3) {
+                break;
+            } else {
+                System.out.println("Invalid choice. Try again.");
+            }
+        }
+    }
+
+    private static void registerComplaint(Scanner sc) {
+        System.out.print("Your Name: ");
+        String name = sc.nextLine();
+        System.out.print("Description: ");
+        String description = sc.nextLine();
+
+        Complaint complaint = new Complaint(idCounter++, name, description);
+        complaints.add(complaint);
+
+        System.out.println("Complaint registered with ID: " + complaint.id);
+    }
+
+    private static void viewStatus(Scanner sc) {
+        System.out.print("Enter Complaint ID: ");
+        int id = sc.nextInt();
+        sc.nextLine(); // Consume newline
+
+        for (Complaint complaint : complaints) {
+            if (complaint.id == id) {
+                System.out.println("Status of Complaint ID " + id + ": " + complaint.status);
+                return;
+            }
+        }
+        System.out.println("Complaint ID not found.");
+    }
+
+    private static void viewAllComplaints() {
+        if (complaints.isEmpty()) {
+            System.out.println("No complaints registered.");
+        } else {
+            for (Complaint complaint : complaints) {
+                System.out.println(complaint);
+            }
+        }
+    }
+
+    private static void updateStatus(Scanner sc) {
+        System.out.print("Enter Complaint ID to update: ");
+        int id = sc.nextInt();
+        sc.nextLine(); // Consume newline
+
+        for (Complaint complaint : complaints) {
+            if (complaint.id == id) {
+                System.out.print("Enter new status: ");
+                complaint.status = sc.nextLine();
+                System.out.println("Complaint status updated.");
+                return;
+            }
+        }
+        System.out.println("Complaint ID not found.");
+    }
+}
