@@ -1,4 +1,10 @@
-# 📝 Grievance Handling System
+## 🎯 Project Goals
+
+This project aims to:
+
+- Simplify grievance registration and tracking
+- Demonstrate clean Java programming practices
+- Provide a foundation for future enhancements# 📝 Grievance Handling System
 
 A **console-based Java application** for managing public grievance complaints.
 Designed with **clean layered architecture** and **interview-ready code quality**.
